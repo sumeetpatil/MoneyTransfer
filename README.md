@@ -1,7 +1,8 @@
 # MoneyTransfer
 
 Money Transfer API starts on http://localhost:7000 by default
-Only 2 frameworks have been used as part of this project - 
+
+Only 2 light weight frameworks have been used as part of this project
  - **Javalin** - Web Framework
  - **JUnit** - Unit Test Frameworrk
 
@@ -12,56 +13,62 @@ mvn exec:java
 ```
 ## Account API - `/account`
 
-**POST** - create a new account 
-**Request Body** - Account object
+**Creating a new account**
 
-Sample body to post:
+Sample Request:
+
+**POST /account**
+
+**Body**
 ```javascript
 {
-	"currency":"IND",
-	"balance":"40",
-	"bank":"test",
-	"userName":"sumeet"
+   "currency":"IND",
+   "balance":10,
+   "bank":"test",
+   "userName":"sumeet"
 }
 ```
 
 Sample response:
+
 **Status: 200 OK**
 ```javascript
 {
-  "id":1,
-  "currency":"IND",
-  "balance":0,
-  "bank":"test",
-  "userName":"sumeet"
+   "id":1,
+   "currency":"IND",
+   "balance":10,
+   "bank":"test",
+   "userName":"sumeet"
 }
 ```
 
 ---
-**GET**
-**/account/{id}** - get account id
-Sample request - **/account/1**
+**Read an account**
+
+Request will be a GET request - **/account/{id}**
+
+**GET /account/1**
 
 Response:
+
 **Status: 200 OK**
+
 ```javascript
 {
   "id":1,
   "currency":"IND",
-  "balance":0,
+  "balance":10,
   "bank":"test",
   "userName":"sumeet"
 }
 ```
-For invalid reads proper reponse, status and exceptions are thrown. Please check the test cases for more details. 
 
 ## Transfer API - `/transfer`
 
-**POST** - transfer
+**transfer amount**
 
-**Request Body** - Transfer object
+Sample post with body:
 
-Sample request:
 ```javascript
 {
 	"srcAcc":1,
@@ -71,9 +78,8 @@ Sample request:
 ```
 
 Sample response:
+
 **Status: 200 OK**
 ```javascript
 Success
 ```
-
-For invalid transfers like insuffucient balance proper reponse, status and exceptions are thrown. are thrown. Please check the test cases for more details. 
