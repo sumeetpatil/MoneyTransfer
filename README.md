@@ -47,12 +47,13 @@ Sample response:
 
 Request will be a GET request - **/account/{id}**
 
+Sample Request:
+
 **GET /account/1**
 
-Response:
+Sample Response:
 
 **Status: 200 OK**
-
 ```javascript
 {
   "id":1,
@@ -71,9 +72,9 @@ Sample post with body:
 
 ```javascript
 {
-	"srcAcc":1,
-	"destAcc":2,
-	"amount":10
+   "srcAcc":1,
+   "destAcc":2,
+   "amount":10
 }
 ```
 
