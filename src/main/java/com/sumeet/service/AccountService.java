@@ -7,6 +7,14 @@ import com.sumeet.model.Currency;
 import com.sumeet.model.Transfer;
 
 public class AccountService {
+	private static final String SUCCESS = "Success";
+	private static final String INSUFFICIENT_BALANCE_IN_SOURC_ACCOUNT = "Insufficient balance in sourc account";
+	private static final String CURRENCY_MISMATCH = "Currency mismatch";
+	private static final String INVALID_DESTINATION_ACCOUNT = "Invalid destination account";
+	private static final String INVALID_SOURCE_ACCOUNT = "Invalid source account";
+	private static final String NO_SUCH_ACCOUNT = "No such account";
+	private static final String INVALID_CURRECNY_CODE = "Invalid currecny code";
+	private static final String MISSING_USER_NAME = "Missing user name";
 	private AccountDao dao;
 
 	public AccountService(AccountDao dao) {
@@ -19,11 +27,11 @@ public class AccountService {
 		String currency = acc.getCurrency();
 		if (userName == null || userName.isEmpty() || bank == null || bank.isEmpty() || currency == null
 				|| currency.isEmpty()) {
-			throw new AccountServiceException("Missing user name");
+			throw new AccountServiceException(MISSING_USER_NAME);
 		}
 
 		if (!Currency.contains(currency)) {
-			throw new AccountServiceException("Invalid currecny code");
+			throw new AccountServiceException(INVALID_CURRECNY_CODE);
 		}
 		return dao.write(acc);
 	}
@@ -31,7 +39,7 @@ public class AccountService {
 	public Account readAccount(int id) throws AccountServiceException, AccountDaoException {
 		Account acc = dao.read(id);
 		if (acc == null) {
-			throw new AccountServiceException("No such account");
+			throw new AccountServiceException(NO_SUCH_ACCOUNT);
 		}
 		return acc;
 	}
@@ -40,15 +48,15 @@ public class AccountService {
 		transfer.getSrcAcc();
 		Account srcAcc = dao.read(transfer.getSrcAcc());
 		if (srcAcc == null) {
-			throw new AccountServiceException("Invalid source account");
+			throw new AccountServiceException(INVALID_SOURCE_ACCOUNT);
 		}
 		Account destAcc = dao.read(transfer.getDestAcc());
 		if (destAcc == null) {
-			throw new AccountServiceException("Invalid destination account");
+			throw new AccountServiceException(INVALID_DESTINATION_ACCOUNT);
 		}
 
 		if (!destAcc.getCurrency().equals(srcAcc.getCurrency())) {
-			throw new AccountServiceException("Currency mismatch");
+			throw new AccountServiceException(CURRENCY_MISMATCH);
 		}
 
 		int amount = transfer.getAmount();
@@ -56,14 +64,14 @@ public class AccountService {
 		int destBal = destAcc.getBalance();
 		int diff = srcBal - amount;
 		if (diff < 0) {
-			throw new AccountServiceException("Insufficient balance in sourc account");
+			throw new AccountServiceException(INSUFFICIENT_BALANCE_IN_SOURC_ACCOUNT);
 		}
 
 		srcAcc.setBalance(diff);
 		destAcc.setBalance(destBal + amount);
 
 		commit(srcAcc, destAcc);
-		return "Success";
+		return SUCCESS;
 	}
 
 	/**
@@ -71,7 +79,7 @@ public class AccountService {
 	 * 
 	 * @param srcAcc
 	 * @param destAcc
-	 * @throws AccountDaoException 
+	 * @throws AccountDaoException
 	 */
 	private void commit(Account srcAcc, Account destAcc) throws AccountDaoException {
 		dao.update(srcAcc);

@@ -14,7 +14,7 @@ import com.sumeet.model.Account;
 public class TestAccount extends TestHelperController {
 	@Test
 	public void testAccountCreate() throws Exception {
-		Request request = getHttpClient().POST("http://localhost:" + getPort() + "/account");
+		Request request = getHttpClient().POST(HTTP_HOST + getPort() + "/account");
 		request.content(new StringContentProvider(
 				"{\"currency\":\"INR\",\"balance\":\"40\",\"bank\":\"test\",\"userName\":\"sumeet\"}"));
 		ContentResponse response = request.send();
@@ -42,7 +42,7 @@ public class TestAccount extends TestHelperController {
 	public void testAccountGet() throws Exception {
 		getService().createAccount(new Account("INR", 40, "test1", "hello"));
 		getService().createAccount(new Account("INR", 50, "test2", "world"));
-		ContentResponse response = getHttpClient().GET("http://localhost:" + getPort() + "/account/1");
+		ContentResponse response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/1");
 		String res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		Account acc = new ObjectMapper().readValue(res, Account.class);
@@ -52,7 +52,7 @@ public class TestAccount extends TestHelperController {
 		assertEquals("hello", acc.getUserName());
 		assertEquals(1, acc.getId());
 
-		response = getHttpClient().GET("http://localhost:" + getPort() + "/account/2");
+		response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/2");
 		res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		acc = new ObjectMapper().readValue(res, Account.class);
@@ -65,7 +65,7 @@ public class TestAccount extends TestHelperController {
 
 	@Test
 	public void testAccountCreateGet() throws Exception {
-		Request request = getHttpClient().POST("http://localhost:" + getPort() + "/account");
+		Request request = getHttpClient().POST(HTTP_HOST + getPort() + "/account");
 		request.content(new StringContentProvider(
 				"{\"currency\":\"INR\",\"balance\":\"40\",\"bank\":\"test\",\"userName\":\"sumeet\"}"));
 		ContentResponse response = request.send();
@@ -78,7 +78,7 @@ public class TestAccount extends TestHelperController {
 		assertEquals("sumeet", acc.getUserName());
 		assertEquals(1, acc.getId());
 
-		response = getHttpClient().GET("http://localhost:" + getPort() + "/account/1");
+		response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/1");
 		res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		acc = new ObjectMapper().readValue(res, Account.class);
@@ -91,7 +91,7 @@ public class TestAccount extends TestHelperController {
 
 	@Test
 	public void testInvalidAccountRead() throws Exception {
-		ContentResponse response = getHttpClient().GET("http://localhost:" + getPort() + "/account/1");
+		ContentResponse response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/1");
 		String res = new String(response.getContent());
 		assertEquals(HttpStatus.BAD_REQUEST_400, response.getStatus());
 		assertEquals("No such account", res);
@@ -99,7 +99,7 @@ public class TestAccount extends TestHelperController {
 
 	@Test
 	public void testInvalidCurrencyCode() throws Exception {
-		Request request = getHttpClient().POST("http://localhost:" + getPort() + "/account");
+		Request request = getHttpClient().POST(HTTP_HOST + getPort() + "/account");
 		request.content(new StringContentProvider(
 				"{\"currency\":\"IN\",\"balance\":\"40\",\"bank\":\"test\",\"userName\":\"sumeet\"}"));
 		ContentResponse response = request.send();
@@ -110,7 +110,7 @@ public class TestAccount extends TestHelperController {
 
 	@Test
 	public void testAccountInvalidPayload1() throws Exception {
-		Request request = getHttpClient().POST("http://localhost:" + getPort() + "/account");
+		Request request = getHttpClient().POST(HTTP_HOST + getPort() + "/account");
 		request.content(new StringContentProvider("test"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
@@ -120,7 +120,7 @@ public class TestAccount extends TestHelperController {
 
 	@Test
 	public void testAccountInvalidPayload2() throws Exception {
-		Request request = getHttpClient().POST("http://localhost:" + getPort() + "/account");
+		Request request = getHttpClient().POST(HTTP_HOST + getPort() + "/account");
 		request.content(new StringContentProvider(
 				"{\"currency1\":\"INR\",\"balance\":\"40\",\"bank\":\"test\",\"userName\":\"sumeet\"}"));
 		ContentResponse response = request.send();

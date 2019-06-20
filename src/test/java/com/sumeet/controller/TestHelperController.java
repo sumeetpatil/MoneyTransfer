@@ -22,6 +22,7 @@ public class TestHelperController {
 	private static Javalin app;
 	private static HttpClient httpClient;
 	private static AccountService service;
+	protected static final String HTTP_HOST = "http://localhost:";
 
 	@BeforeClass
 	public static void setup() throws Exception {

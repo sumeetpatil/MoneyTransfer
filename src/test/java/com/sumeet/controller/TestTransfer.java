@@ -14,19 +14,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sumeet.model.Account;
 
 public class TestTransfer extends TestHelperController {
+
 	@Test
 	public void testTransferSuccess() throws Exception {
 		int port = getPort();
 		getService().createAccount(new Account("INR", 40, "test1", "hello"));
 		getService().createAccount(new Account("INR", 50, "test2", "world"));
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("{\"srcAcc\":1,\"destAcc\":2,\"amount\":10}"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		assertEquals("Success", res);
 
-		response = getHttpClient().GET("http://localhost:" + getPort() + "/account/1");
+		response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/1");
 		res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		Account acc = new ObjectMapper().readValue(res, Account.class);
@@ -36,7 +37,7 @@ public class TestTransfer extends TestHelperController {
 		assertEquals("hello", acc.getUserName());
 		assertEquals(1, acc.getId());
 
-		response = getHttpClient().GET("http://localhost:" + getPort() + "/account/2");
+		response = getHttpClient().GET(HTTP_HOST + getPort() + "/account/2");
 		res = new String(response.getContent());
 		assertEquals(HttpStatus.OK_200, response.getStatus());
 		acc = new ObjectMapper().readValue(res, Account.class);
@@ -53,7 +54,7 @@ public class TestTransfer extends TestHelperController {
 		int port = getPort();
 		map.put(1, new Account("INR", 40, "test1", "hello"));
 		map.put(2, new Account("INR", 50, "test2", "world"));
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("{\"srcAcc\":10,\"destAcc\":2,\"amount\":10}"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
@@ -67,7 +68,7 @@ public class TestTransfer extends TestHelperController {
 		int port = getPort();
 		map.put(1, new Account("INR", 40, "test1", "hello"));
 		map.put(2, new Account("INR", 50, "test2", "world"));
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("{\"srcAcc\":1,\"destAcc\":20,\"amount\":10}"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
@@ -81,7 +82,7 @@ public class TestTransfer extends TestHelperController {
 		int port = getPort();
 		map.put(1, new Account("INR", 5, "test1", "hello"));
 		map.put(2, new Account("INR", 10, "test2", "world"));
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("{\"srcAcc\":1,\"destAcc\":2,\"amount\":10}"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
@@ -92,7 +93,7 @@ public class TestTransfer extends TestHelperController {
 	@Test
 	public void testInvalidPayload1() throws Exception {
 		int port = getPort();
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("{\"srcAcc1\":1,\"destAcc\":2,\"amount\":10}"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
@@ -103,7 +104,7 @@ public class TestTransfer extends TestHelperController {
 	@Test
 	public void testInvalidPayload2() throws Exception {
 		int port = getPort();
-		Request request = getHttpClient().POST("http://localhost:" + port + "/transfer");
+		Request request = getHttpClient().POST(HTTP_HOST + port + "/transfer");
 		request.content(new StringContentProvider("test"));
 		ContentResponse response = request.send();
 		String res = new String(response.getContent());
