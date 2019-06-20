@@ -84,3 +84,7 @@ Sample response:
 ```javascript
 Success
 ```
+
+## Invalid Scenarios
+
+Invalid scenarios like insufficient balance, invalid currency code, invalid data, invalid json and more have been covered with proper response and status codes(Bad Request - 400, Internal Server Error - 500)
