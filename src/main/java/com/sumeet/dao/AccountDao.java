@@ -13,30 +13,35 @@ public class AccountDao {
 	}
 
 	public Account read(int id) throws AccountDaoException {
-		if (accounts == null) {
-			throw new AccountDaoException(NO_DB_CONFIGURED);
-		}
+		isDBConfigured();
 		return accounts.get(id);
 	}
 
 	public Account write(Account acc) throws AccountDaoException {
-		if (accounts == null) {
-			throw new AccountDaoException(NO_DB_CONFIGURED);
-		}
+		isDBConfigured();
 		int accId = getCount();
 		acc.setId(accId);
 		accounts.put(accId, acc);
 		return acc;
 	}
 
-	private synchronized int getCount() {
-		return accounts.size() + 1;
+	public void update(Account acc) throws AccountDaoException {
+		isDBConfigured();
+		accounts.put(acc.getId(), acc);
 	}
 
-	public void update(Account acc) throws AccountDaoException {
+	/**
+	 * Validate if there is an issue with the DB
+	 * 
+	 * @throws AccountDaoException
+	 */
+	private void isDBConfigured() throws AccountDaoException {
 		if (accounts == null) {
 			throw new AccountDaoException(NO_DB_CONFIGURED);
 		}
-		accounts.put(acc.getId(), acc);
+	}
+
+	private synchronized int getCount() {
+		return accounts.size() + 1;
 	}
 }
