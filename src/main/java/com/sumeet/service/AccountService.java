@@ -14,7 +14,7 @@ public class AccountService {
 	private static final String INVALID_SOURCE_ACCOUNT = "Invalid source account";
 	private static final String NO_SUCH_ACCOUNT = "No such account";
 	private static final String INVALID_CURRECNY_CODE = "Invalid currecny code";
-	private static final String MISSING_USER_NAME = "Missing user name";
+	private static final String MISSING_USER_NAME = "Missing data";
 	private AccountDao dao;
 
 	public AccountService(AccountDao dao) {
