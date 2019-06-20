@@ -1,7 +1,6 @@
 package com.sumeet.dao;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.sumeet.model.Account;
 
@@ -12,17 +11,19 @@ public class AccountDao {
 		this.accounts = accounts;
 	}
 
-	public Account read(int id) {
+	public Account read(int id) throws AccountDaoException {
+		if (accounts == null) {
+			throw new AccountDaoException("No DB configured");
+		}
 		return accounts.get(id);
 	}
 
-	public Account write(Account acc) {
+	public Account write(Account acc) throws AccountDaoException {
+		if (accounts == null) {
+			throw new AccountDaoException("No DB configured");
+		}
 		int accId = getCount();
 		acc.setId(accId);
-		if (accounts == null) {
-			accounts = new ConcurrentHashMap<>();
-		}
-
 		accounts.put(accId, acc);
 		return acc;
 	}
@@ -31,7 +32,10 @@ public class AccountDao {
 		return accounts.size() + 1;
 	}
 
-	public void update(Account acc) {
+	public void update(Account acc) throws AccountDaoException {
+		if (accounts == null) {
+			throw new AccountDaoException("No DB configured");
+		}
 		accounts.put(acc.getId(), acc);
 	}
 }

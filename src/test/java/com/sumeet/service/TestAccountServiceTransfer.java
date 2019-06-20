@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import com.sumeet.dao.AccountDao;
+import com.sumeet.dao.AccountDaoException;
 import com.sumeet.model.Account;
 import com.sumeet.model.Transfer;
 
@@ -17,7 +18,7 @@ public class TestAccountServiceTransfer {
 	private AccountService service = new AccountService(new AccountDao(map));
 
 	@Test
-	public void transfer() throws AccountServiceException {
+	public void transfer() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 10, "test1", "sumeet1"));
 		service.createAccount(new Account("INR", 0, "test2", "sumeet2"));
 		Transfer transfer = new Transfer(1, 2, 10);
@@ -40,7 +41,7 @@ public class TestAccountServiceTransfer {
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void transferCurrencyMismatch() throws AccountServiceException {
+	public void transferCurrencyMismatch() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 10, "test1", "sumeet1"));
 		service.createAccount(new Account("USD", 0, "test2", "sumeet2"));
 		Transfer transfer = new Transfer(1, 2, 10);
@@ -49,7 +50,7 @@ public class TestAccountServiceTransfer {
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void transferInvalidSrcAcc() throws AccountServiceException {
+	public void transferInvalidSrcAcc() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 10, "test1", "sumeet1"));
 		service.createAccount(new Account("INR", 0, "test2", "sumeet2"));
 		Transfer transfer = new Transfer(10, 2, 10);
@@ -57,7 +58,7 @@ public class TestAccountServiceTransfer {
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void transferInvalidDestAcc() throws AccountServiceException {
+	public void transferInvalidDestAcc() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 10, "test1", "sumeet1"));
 		service.createAccount(new Account("INR", 0, "test2", "sumeet2"));
 		Transfer transfer = new Transfer(1, 3, 10);
@@ -65,13 +66,13 @@ public class TestAccountServiceTransfer {
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void transferInvalidBalance() throws AccountServiceException {
+	public void transferInvalidBalance() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 0, "test1", "sumeet1"));
 		service.createAccount(new Account("INR", 0, "test2", "sumeet2"));
 		Transfer transfer = new Transfer(1, 2, 10);
 		service.transfer(transfer);
 	}
-
+	
 	@After
 	public void clear() {
 		map.clear();

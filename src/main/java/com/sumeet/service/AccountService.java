@@ -1,6 +1,7 @@
 package com.sumeet.service;
 
 import com.sumeet.dao.AccountDao;
+import com.sumeet.dao.AccountDaoException;
 import com.sumeet.model.Account;
 import com.sumeet.model.Currency;
 import com.sumeet.model.Transfer;
@@ -12,7 +13,7 @@ public class AccountService {
 		this.dao = dao;
 	}
 
-	public Account createAccount(Account acc) throws AccountServiceException {
+	public Account createAccount(Account acc) throws AccountServiceException, AccountDaoException {
 		String userName = acc.getUserName();
 		String bank = acc.getBank();
 		String currency = acc.getCurrency();
@@ -27,7 +28,7 @@ public class AccountService {
 		return dao.write(acc);
 	}
 
-	public Account readAccount(int id) throws AccountServiceException {
+	public Account readAccount(int id) throws AccountServiceException, AccountDaoException {
 		Account acc = dao.read(id);
 		if (acc == null) {
 			throw new AccountServiceException("No such account");
@@ -35,7 +36,7 @@ public class AccountService {
 		return acc;
 	}
 
-	public String transfer(Transfer transfer) throws AccountServiceException {
+	public String transfer(Transfer transfer) throws AccountServiceException, AccountDaoException {
 		transfer.getSrcAcc();
 		Account srcAcc = dao.read(transfer.getSrcAcc());
 		if (srcAcc == null) {
@@ -70,8 +71,9 @@ public class AccountService {
 	 * 
 	 * @param srcAcc
 	 * @param destAcc
+	 * @throws AccountDaoException 
 	 */
-	private void commit(Account srcAcc, Account destAcc) {
+	private void commit(Account srcAcc, Account destAcc) throws AccountDaoException {
 		dao.update(srcAcc);
 		dao.update(destAcc);
 	}

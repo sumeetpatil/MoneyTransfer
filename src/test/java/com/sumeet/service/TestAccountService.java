@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import com.sumeet.dao.AccountDao;
+import com.sumeet.dao.AccountDaoException;
 import com.sumeet.model.Account;
 
 public class TestAccountService {
@@ -16,7 +17,7 @@ public class TestAccountService {
 	private AccountService service = new AccountService(new AccountDao(map));
 
 	@Test
-	public void accountCreateRead() throws AccountServiceException {
+	public void accountCreateRead() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 0, "test1", "sumeet1"));
 		service.createAccount(new Account("INR", 10, "test2", "sumeet2"));
 		Account accRead1 = service.readAccount(1);
@@ -35,27 +36,27 @@ public class TestAccountService {
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void accountCreateInvalidCurrency() throws AccountServiceException {
+	public void accountCreateInvalidCurrency() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR1", 0, "test1", "sumeet1"));
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void accountInvalidRead() throws AccountServiceException {
+	public void accountInvalidRead() throws AccountServiceException, AccountDaoException {
 		service.readAccount(1);
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void accountCreateMissingData1() throws AccountServiceException {
+	public void accountCreateMissingData1() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("", 0, "", "sumeet1"));
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void accountCreateMissingData2() throws AccountServiceException {
+	public void accountCreateMissingData2() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("", 0, "", null));
 	}
 
 	@Test(expected = AccountServiceException.class)
-	public void accountCreateMissingData3() throws AccountServiceException {
+	public void accountCreateMissingData3() throws AccountServiceException, AccountDaoException {
 		service.createAccount(new Account("INR", 0, "test", ""));
 	}
 

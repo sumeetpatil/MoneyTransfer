@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.sumeet.dao.AccountDaoException;
 import com.sumeet.model.Account;
 import com.sumeet.model.Transfer;
 import com.sumeet.service.AccountService;
@@ -51,6 +52,13 @@ public class AccountController {
 			logger.warn(e.getMessage(), e);
 			ctx.status(HttpStatus.BAD_REQUEST_400);
 			ctx.result("Invalid payload");
+		});
+
+		app.exception(AccountDaoException.class, (e, ctx) -> {
+			/* DB issue */
+			logger.error(e.getMessage(), e);
+			ctx.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+			ctx.result("Internal server error. Please contanct your admin.");
 		});
 	}
 }
