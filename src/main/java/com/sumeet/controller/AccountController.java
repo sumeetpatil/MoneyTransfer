@@ -16,6 +16,7 @@ import io.javalin.Javalin;
 import io.javalin.plugin.json.JavalinJson;
 
 public class AccountController {
+	private static final String INVALID_PAYLOAD = "Invalid payload";
 	private static final String ACCOUNT_END_POINT = "/account";
 	private static final String ACCOUNT_READ_END_POINT = "/account/:id";
 	private static final String TRANSFER_END_POINT = "/transfer";
@@ -56,7 +57,7 @@ public class AccountController {
 		app.exception(UnrecognizedPropertyException.class, (e, ctx) -> {
 			logger.warn(e.getMessage(), e);
 			ctx.status(HttpStatus.BAD_REQUEST_400);
-			ctx.result("Invalid payload");
+			ctx.result(INVALID_PAYLOAD);
 		});
 
 		app.exception(AccountDaoException.class, (e, ctx) -> {
